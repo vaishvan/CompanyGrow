@@ -13,8 +13,8 @@ A full-stack web application for managing employees, projects, and courses with 
 ### 1. Clone the repository
 
 ```bash
-git clone <repository-url>
-cd Company
+git clone https://github.com/vaishvan/CompanyGrow
+cd CompanyGrow
 ```
 
 ### 2. Backend Setup
@@ -28,7 +28,7 @@ Create a `.env` file in the backend directory with the following variables:
 
 ```
 PORT=5000
-MONGODB_URI=mongodb://localhost:27017/companygrow
+MONGODB_URI=mongodb://0.0.0.0/companygrow
 JWT_SECRET=your_secure_jwt_secret_key
 CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key

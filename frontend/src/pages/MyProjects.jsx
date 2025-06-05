@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react'
-import { FolderOpen, Calendar, Users } from 'lucide-react'
+import { FolderOpen, Calendar, Users, Coins, CheckCircle, Clock } from 'lucide-react'
 
 const MyProjects = () => {
   const [projects, setProjects] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
-
+  const [completingProject, setCompletingProject] = useState(null)
   useEffect(() => {
     fetchMyProjects()
   }, [])
+
   const fetchMyProjects = async () => {
     try {
       const token = localStorage.getItem('token')
@@ -33,6 +34,43 @@ const MyProjects = () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  const handleCompleteProject = async (projectId) => {
+    try {
+      setCompletingProject(projectId)
+      const token = localStorage.getItem('token')
+      const response = await fetch(`http://localhost:5000/api/projects/${projectId}/progress`, {
+        method: 'PUT',
+        headers: {
+          'Authorization': `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ completed: true })
+      })
+
+      if (response.ok) {
+        const result = await response.json()
+        if (result.tokensAwarded > 0) {
+          alert(`Congratulations! Project completed! You earned ${result.tokensAwarded} tokens.`)
+        }
+        fetchMyProjects() // Refresh the projects list
+      } else {
+        throw new Error('Failed to complete project')
+      }
+    } catch (error) {
+      console.error('Error completing project:', error)
+      alert('Failed to complete project. Please try again.')
+    } finally {
+      setCompletingProject(null)
+    }
+  }
+
+  const isProjectCompleted = (project) => {
+    const currentUser = JSON.parse(localStorage.getItem('user'))
+    return project.assignedEmployees?.some(emp => 
+      emp.employee === currentUser?.id && emp.completed
+    )
   }
 
   const getStatusColor = (status) => {
@@ -119,9 +157,7 @@ const MyProjects = () => {
                     <span>{project.assignedEmployees.length} team member{project.assignedEmployees.length !== 1 ? 's' : ''}</span>
                   </div>
                 )}
-              </div>
-
-              {/* Progress Indicator */}
+              </div>              {/* Progress Indicator */}
               {project.progress !== undefined && (
                 <div className="mt-4">
                   <div className="flex justify-between items-center mb-2">
@@ -136,6 +172,41 @@ const MyProjects = () => {
                   </div>
                 </div>
               )}
+
+              {/* Tokens and Completion */}
+              <div className="mt-4 pt-4 border-t border-gray-400">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center text-sm text-black">
+                    <Coins className="w-4 h-4 mr-2 text-yellow-600" />
+                    <span className="font-bold">{project.tokens || 0} tokens</span>
+                  </div>
+                  
+                  {isProjectCompleted(project) ? (
+                    <div className="flex items-center text-green-600">
+                      <CheckCircle className="w-4 h-4 mr-1" />
+                      <span className="text-sm font-semibold">Completed</span>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => handleCompleteProject(project._id)}
+                      disabled={completingProject === project._id}
+                      className="flex items-center px-3 py-1 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {completingProject === project._id ? (
+                        <>
+                          <Clock className="w-4 h-4 mr-1 animate-spin" />
+                          <span className="text-sm">Completing...</span>
+                        </>
+                      ) : (
+                        <>
+                          <CheckCircle className="w-4 h-4 mr-1" />
+                          <span className="text-sm">Complete</span>
+                        </>
+                      )}
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           ))}
         </div>

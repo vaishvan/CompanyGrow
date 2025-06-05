@@ -5,12 +5,14 @@ import axios from 'axios'
 
 const EmployeeDirectory = () => {
   const [employees, setEmployees] = useState([])
-  const [filteredEmployees, setFilteredEmployees] = useState([])  const [loading, setLoading] = useState(true)
+  const [filteredEmployees, setFilteredEmployees] = useState([])
+  const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
-
   useEffect(() => {
     fetchEmployees()
-  }, [])  useEffect(() => {
+  }, [])
+
+  useEffect(() => {
     // Filter employees to exclude managers/admins
     const filtered = employees.filter(employee => {
       // Filter out managers and admins
@@ -18,6 +20,7 @@ const EmployeeDirectory = () => {
     })
     setFilteredEmployees(filtered)
   }, [employees])
+
   const fetchEmployees = async () => {
     try {
       setLoading(true)

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { User, Mail, Phone, Calendar, MapPin, Briefcase, Upload, Trash2 } from 'lucide-react'
+import { User, Mail, Phone, Calendar, MapPin, Briefcase, Upload, Trash2, Coins } from 'lucide-react'
 import axios from 'axios'
 
 const EmployeeProfile = () => {  const [profile, setProfile] = useState(null)
@@ -312,7 +312,33 @@ const EmployeeProfile = () => {  const [profile, setProfile] = useState(null)
                 <h2 className="text-2xl font-bold text-white">
                   {profile?.firstName} {profile?.lastName}
                 </h2>
-                <p className="text-gray-300 capitalize">{profile?.role}</p>
+                <p className="text-gray-300 capitalize">{profile?.role}</p>              </div>
+            </div>
+
+            {/* Token Information */}
+            <div className="bg-gray-700 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-white mb-3 flex items-center">
+                <Coins className="w-5 h-5 mr-2 text-yellow-500" />
+                Token Balance
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center">
+                  <p className="text-sm text-gray-400">Total Earned</p>
+                  <p className="text-2xl font-bold text-yellow-500">{profile?.totalTokens || 0}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-gray-400">Available</p>
+                  <p className="text-2xl font-bold text-green-500">{profile?.availableTokens || 0}</p>
+                </div>
+                <div className="text-center">
+                  <p className="text-sm text-gray-400">Cashed Out</p>
+                  <p className="text-2xl font-bold text-blue-500">{profile?.cashedOutTokens || 0}</p>
+                </div>
+              </div>
+              <div className="mt-3 text-center">
+                <p className="text-sm text-gray-400">
+                  Total Earnings: ₹{(profile?.totalEarnings || 0).toFixed(2)}
+                </p>
               </div>
             </div>
 

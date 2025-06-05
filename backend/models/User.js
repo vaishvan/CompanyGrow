@@ -85,10 +85,47 @@ const userSchema = new mongoose.Schema({
       type: Number,
       default: 0
     }
-  }],
-  totalTokens: {
+  }],  totalTokens: {
     type: Number,
     default: 0
+  },
+  availableTokens: {
+    type: Number,
+    default: 0
+  },
+  cashedOutTokens: {
+    type: Number,
+    default: 0
+  },
+  totalEarnings: {
+    type: Number,
+    default: 0
+  },
+  paymentHistory: [{
+    amount: {
+      type: Number,
+      required: true
+    },
+    tokens: {
+      type: Number,
+      required: true
+    },
+    transactionId: {
+      type: String,
+      required: true
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'completed', 'failed'],
+      default: 'pending'
+    },
+    paymentDate: {
+      type: Date,
+      default: Date.now
+    }
+  }],
+  stripeAccountId: {
+    type: String
   },
   badges: [{
     name: String,

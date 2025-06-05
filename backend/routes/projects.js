@@ -129,8 +129,64 @@ router.post('/:id/assign', auth, managerAuth, async (req, res) => {
     await project.save();
 
     // Update user's projects
-    employee.projects.push({ project: project._id });
-    await employee.save();    res.json(project);
+    employee.projects.push({ project: project._id });    await employee.save();
+    res.json(project);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Update project progress/completion (for employees)
+router.put('/:id/progress', auth, async (req, res) => {
+  try {
+    const { completed } = req.body;
+    const projectId = req.params.id;
+    const userId = req.user._id;
+
+    const project = await Project.findById(projectId);
+    if (!project) {
+      return res.status(404).json({ message: 'Project not found' });
+    }
+
+    // Find the employee assignment
+    const employeeAssignment = project.assignedEmployees.find(
+      emp => emp.employee.toString() === userId.toString()
+    );
+
+    if (!employeeAssignment) {
+      return res.status(403).json({ message: 'You are not assigned to this project' });
+    }
+
+    // Check if project was already completed to prevent double token awarding
+    const wasAlreadyCompleted = employeeAssignment.completed;
+
+    // Update completion status
+    employeeAssignment.completed = completed;
+
+    // Award tokens if project is being marked as completed for the first time
+    if (completed && !wasAlreadyCompleted) {
+      const user = await User.findById(userId);
+      if (user) {
+        // Award tokens
+        const tokensToAward = project.tokens || 0;
+        user.totalTokens += tokensToAward;
+        user.availableTokens += tokensToAward;
+        
+        // Update the assignment with tokens earned
+        employeeAssignment.tokensEarned = tokensToAward;
+        
+        await user.save();
+        
+        console.log(`Awarded ${tokensToAward} tokens to user ${user.name} for completing project: ${project.name}`);
+      }
+    }
+
+    await project.save();
+    res.json({ 
+      message: completed ? 'Project marked as completed and tokens awarded!' : 'Project progress updated',
+      tokensAwarded: completed && !wasAlreadyCompleted ? project.tokens : 0
+    });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Server error' });

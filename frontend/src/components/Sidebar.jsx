@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { Users, FolderOpen, BookOpen, FileText, BarChart3, User } from 'lucide-react'
+import { Users, FolderOpen, BookOpen, FileText, BarChart3, User, Coins } from 'lucide-react'
 
 const Sidebar = ({ user }) => {
   // Admin navigation items
@@ -36,8 +36,7 @@ const Sidebar = ({ user }) => {
       path: '/dashboard/courses',
       icon: BookOpen
     }
-  ]
-  // Employee navigation items
+  ]  // Employee navigation items
   const employeeNavItems = [
     {
       name: 'Browse Courses',
@@ -58,6 +57,11 @@ const Sidebar = ({ user }) => {
       name: 'My Reports',
       path: '/dashboard/my-reports',
       icon: BarChart3
+    },
+    {
+      name: 'Payment Dashboard',
+      path: '/dashboard/payments',
+      icon: Coins
     }
   ]
 

@@ -13,6 +13,7 @@ import MyCourses from './MyCourses'
 import MyProjects from './MyProjects'
 import CourseDetail from './CourseDetail'
 import BrowseCourses from './BrowseCourses'
+import PaymentDashboard from './PaymentDashboard'
 
 const Dashboard = ({ user, onLogout }) => {  return (
     <div className="h-screen bg-slate-800 flex">
@@ -42,7 +43,7 @@ const Dashboard = ({ user, onLogout }) => {  return (
                 <Route path="/employee-report/:id" element={<EmployeeReport />} />
                 <Route path="/reports" element={<Reports />} />
               </>
-            )}{/* Employee routes */}
+            )}            {/* Employee routes */}
             {user?.role === 'employee' && (
               <>
                 <Route path="/" element={<Navigate to="/dashboard/browse-courses" replace />} />
@@ -50,6 +51,7 @@ const Dashboard = ({ user, onLogout }) => {  return (
                 <Route path="/my-courses" element={<MyCourses />} />
                 <Route path="/my-projects" element={<MyProjects />} />
                 <Route path="/my-reports" element={<Reports />} />
+                <Route path="/payments" element={<PaymentDashboard />} />
                 <Route path="/course/:id" element={<CourseDetail />} />
               </>
             )}

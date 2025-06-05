@@ -153,11 +153,21 @@ router.post('/:id/progress', auth, async (req, res) => {
         user: userId,
         progress: progress,
         completed: progress >= 100
-      });
-    } else {
+      });    } else {
       // Update existing enrollment
+      const oldProgress = userEnrollment.progress;
       userEnrollment.progress = Math.max(userEnrollment.progress, progress);
       userEnrollment.completed = userEnrollment.progress >= 100;
+      
+      // Award tokens if course is newly completed
+      if (!userEnrollment.completed && userEnrollment.progress >= 100 && oldProgress < 100) {
+        const user = await User.findById(userId);
+        if (user) {
+          user.totalTokens += course.tokens;
+          user.availableTokens += course.tokens;
+          await user.save();
+        }
+      }
     }
 
     await course.save();

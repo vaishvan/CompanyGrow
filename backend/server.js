@@ -21,6 +21,7 @@ app.use('/api/projects', require('./routes/projects'));
 app.use('/api/employees', require('./routes/employees'));
 app.use('/api/reports', require('./routes/reports'));
 app.use('/api/upload', require('./routes/upload'));
+app.use('/api/payments', require('./routes/payments'));
 
 // Database connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://0.0.0.0/companygrow')

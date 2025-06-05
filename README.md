@@ -13,8 +13,8 @@ A full-stack web application for managing employees, projects, and courses with 
 ### 1. Clone the repository
 
 ```bash
-git clone <[repository-url](https://github.com/vaishvan/CompanyGrow)>
-cd Company
+git clone https://github.com/vaishvan/CompanyGrow
+cd CompanyGrow
 ```
 
 ### 2. Backend Setup

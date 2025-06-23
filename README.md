@@ -33,6 +33,7 @@ JWT_SECRET=your_secure_jwt_secret_key
 CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
 CLOUDINARY_API_KEY=your_cloudinary_api_key
 CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+STRIPE_API_SECRET=your_stripe_api_secret
 ```
 
 ### 3. Frontend Setup
@@ -85,6 +86,7 @@ After seeding the database, you can log in with:
 - Course management and enrollment
 - Employee performance reports
 - PDF report generation
+- Token management for real-time rewards
 
 ## Technology Stack
 
@@ -93,3 +95,4 @@ After seeding the database, you can log in with:
 - Database: MongoDB
 - Authentication: JWT
 - File Upload: Cloudinary
+- Token Management: Stripe

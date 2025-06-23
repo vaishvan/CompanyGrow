@@ -1,4 +1,4 @@
-# Company Employee Management System
+# CompanyGrow
 
 A full-stack web application for managing employees, projects, and courses with role-based access control.
 
